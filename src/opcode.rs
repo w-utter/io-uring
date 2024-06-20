@@ -1107,27 +1107,41 @@ opcode! {
 
     pub struct ReadMulti {
         fd: { impl sealed::UseFixed },
-        buf_group: { u16 },
-        len: { u32 }
+        buf: { *mut u8 },
+        len: { u32 },
         ;;
-        flags: i32 = 0,
+        /// `offset` contains the read or write offset.
+        ///
+        /// If `fd` does not refer to a seekable file, `offset` must be set to zero.
+        /// If `offset` is set to `-1`, the offset will use (and advance) the file position,
+        /// like the `read(2)` and `write(2)` system calls.
         offset: u64 = 0,
+        ioprio: u16 = 0,
+        rw_flags: types::RwFlags = 0,
+        buf_group: u16 = 0,
     }
 
     pub const CODE = sys::IORING_OP_READ_MULTISHOT;
 
     pub fn build(self) -> Entry {
-        let ReadMulti { fd, buf_group, flags, len, offset} = self;
+        let ReadMulti {
+            fd,
+            buf, len, offset,
+            ioprio, rw_flags,
+            buf_group,
+        } = self;
 
         let mut sqe = sqe_zeroed();
+
         sqe.opcode = Self::CODE;
         assign_fd!(sqe.fd = fd);
-        sqe.__bindgen_anon_3.msg_flags = flags as _;
+
+        sqe.ioprio = ioprio;
+        sqe.__bindgen_anon_2.addr = buf as _;
         sqe.len = len;
         sqe.__bindgen_anon_1.off = offset;
+        sqe.__bindgen_anon_3.rw_flags = rw_flags;
         sqe.__bindgen_anon_4.buf_group = buf_group;
-        sqe.flags |= 1 << sys::IOSQE_BUFFER_SELECT_BIT;
-        //sqe.ioprio = sys::IORING_RECV_MULTISHOT as _;
         Entry(sqe)
     }
 }
