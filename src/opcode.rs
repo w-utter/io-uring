@@ -1108,7 +1108,6 @@ opcode! {
     pub struct ReadMulti {
         fd: { impl sealed::UseFixed },
         buf_group: { u16 },
-        len: { u32 },
         ;;
         /// `offset` contains the read or write offset.
         ///
@@ -1125,7 +1124,7 @@ opcode! {
     pub fn build(self) -> Entry {
         let ReadMulti {
             fd,
-            len, offset,
+            offset,
             ioprio, rw_flags,
             buf_group,
         } = self;
@@ -1137,7 +1136,6 @@ opcode! {
 
         sqe.flags |= 1 << sys::IOSQE_BUFFER_SELECT_BIT;
         sqe.__bindgen_anon_4.buf_group = buf_group;
-        sqe.len = len;
         sqe.__bindgen_anon_1.off = offset;
         sqe.__bindgen_anon_3.rw_flags = rw_flags;
         sqe.ioprio = ioprio;
