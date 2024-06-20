@@ -1120,7 +1120,7 @@ opcode! {
         rw_flags: types::RwFlags = 0,
     }
 
-    pub const CODE = sys::IORING_OP_READ;
+    pub const CODE = sys::IORING_OP_READ_MULTISHOT;
 
     pub fn build(self) -> Entry {
         let ReadMulti {
