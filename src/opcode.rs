@@ -1139,10 +1139,9 @@ opcode! {
         sqe.__bindgen_anon_4.buf_group = buf_group;
         //sqe.len = len;
         sqe.__bindgen_anon_1.off = offset;
-
-        /*
-        sqe.ioprio = ioprio;
         sqe.__bindgen_anon_3.rw_flags = rw_flags;
+        sqe.ioprio = ioprio;
+        /*
         */
         Entry(sqe)
     }
