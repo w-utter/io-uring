@@ -1136,12 +1136,14 @@ opcode! {
         sqe.opcode = Self::CODE;
         assign_fd!(sqe.fd = fd);
 
+        /*
         sqe.ioprio = ioprio;
         sqe.__bindgen_anon_2.addr = buf as _;
         sqe.len = len;
         sqe.__bindgen_anon_1.off = offset;
         sqe.__bindgen_anon_3.rw_flags = rw_flags;
         sqe.__bindgen_anon_4.buf_group = buf_group;
+        */
         Entry(sqe)
     }
 }
