@@ -1115,7 +1115,7 @@ opcode! {
     pub const CODE = sys::IORING_OP_RECV;
 
     pub fn build(self) -> Entry {
-        let RecvMulti { fd, buf_group, flags } = self;
+        let ReadMulti { fd, buf_group, flags } = self;
 
         let mut sqe = sqe_zeroed();
         sqe.opcode = Self::CODE;
