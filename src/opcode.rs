@@ -899,7 +899,12 @@ opcode! {
 
         sqe.opcode = Self::CODE;
         assign_fd!(sqe.fd = fd);
-        sqe.ioprio = ioprio;
+
+        sqe.ioprio = if multi {
+            ioprio | ( sys::IORING_OP_READ_MULTISHOT as u16)
+        }else {
+            ioprio
+        };
         sqe.__bindgen_anon_2.addr = buf as _;
         sqe.len = len;
         sqe.__bindgen_anon_1.off = offset;
