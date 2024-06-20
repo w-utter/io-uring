@@ -874,7 +874,8 @@ opcode! {
         offset: u64 = 0,
         ioprio: u16 = 0,
         rw_flags: types::RwFlags = 0,
-        buf_group: u16 = 0
+        buf_group: u16 = 0,
+        multi: bool = false,
     }
 
     pub const CODE = sys::IORING_OP_READ;
@@ -884,10 +885,18 @@ opcode! {
             fd,
             buf, len, offset,
             ioprio, rw_flags,
-            buf_group
+            buf_group,
+            multi,
         } = self;
 
         let mut sqe = sqe_zeroed();
+
+        sqe.opcode = if self.multi {
+            sys::IORING_OP_READ_MULTISHOT as _
+        }else {
+            Self::CODE
+        };
+
         sqe.opcode = Self::CODE;
         assign_fd!(sqe.fd = fd);
         sqe.ioprio = ioprio;
