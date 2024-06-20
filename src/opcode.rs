@@ -1120,16 +1120,44 @@ opcode! {
     pub fn build(self) -> Entry {
         let ReadMulti { fd, buf_group, flags, ioprio, len, offset, rw_flags } = self;
 
+        /*
         let mut sqe = sqe_zeroed();
         sqe.opcode = Self::CODE;
         sqe.len = len;
         assign_fd!(sqe.fd = fd);
+        /*
         sqe.__bindgen_anon_3.msg_flags = flags as _;
         sqe.__bindgen_anon_4.buf_group = buf_group;
         sqe.__bindgen_anon_3.rw_flags = rw_flags;
         sqe.__bindgen_anon_1.off = offset;
         sqe.flags = 0;
         sqe.ioprio = ioprio;
+        */
+        */
+
+
+            /*
+        let mut sqe = sqe_zeroed();
+        sqe.opcode = Self::CODE;
+        assign_fd!(sqe.fd = fd);
+        sqe.__bindgen_anon_3.msg_flags = flags as _;
+        sqe.__bindgen_anon_4.buf_group = buf_group;
+        sqe.flags |= 1 << sys::IOSQE_BUFFER_SELECT_BIT;
+        sqe.ioprio = sys::IORING_RECV_MULTISHOT as _;
+        */
+
+        let mut sqe = sqe_zeroed();
+
+        sqe.opcode = Self::CODE;
+        assign_fd!(sqe.fd = fd);
+
+        sqe.ioprio = ioprio;
+        sqe.len = len;
+        sqe.__bindgen_anon_1.off = offset;
+        sqe.__bindgen_anon_3.rw_flags = rw_flags;
+        sqe.__bindgen_anon_4.buf_group = buf_group;
+        sqe.ioprio = ioprio as _;
+
         Entry(sqe)
     }
 }
