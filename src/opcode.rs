@@ -1108,22 +1108,27 @@ opcode! {
     pub struct ReadMulti {
         fd: { impl sealed::UseFixed },
         buf_group: { u16 },
+        len: { u32 },
         ;;
         flags: i32 = 0,
         ioprio: u16 = 0,
+        offset: u64 = 0,
+        rw_flags: types::RwFlags = 0,
     }
-
     pub const CODE = sys::IORING_OP_READ_MULTISHOT;
 
     pub fn build(self) -> Entry {
-        let ReadMulti { fd, buf_group, flags, ioprio } = self;
+        let ReadMulti { fd, buf_group, flags, ioprio, len, offset, rw_flags } = self;
 
         let mut sqe = sqe_zeroed();
         sqe.opcode = Self::CODE;
+        sqe.len = len;
         assign_fd!(sqe.fd = fd);
         sqe.__bindgen_anon_3.msg_flags = flags as _;
         sqe.__bindgen_anon_4.buf_group = buf_group;
-        sqe.flags |= 1 << sys::IOSQE_BUFFER_SELECT_BIT;
+        sqe.__bindgen_anon_3.rw_flags = rw_flags;
+        sqe.__bindgen_anon_1.off = offset;
+        sqe.flags = 0;
         sqe.ioprio = ioprio;
         Entry(sqe)
     }
