@@ -1137,12 +1137,10 @@ opcode! {
 
         sqe.flags |= 1 << sys::IOSQE_BUFFER_SELECT_BIT;
         sqe.__bindgen_anon_4.buf_group = buf_group;
-        //sqe.len = len;
+        sqe.len = len;
         sqe.__bindgen_anon_1.off = offset;
         sqe.__bindgen_anon_3.rw_flags = rw_flags;
         sqe.ioprio = ioprio;
-        /*
-        */
         Entry(sqe)
     }
 }
