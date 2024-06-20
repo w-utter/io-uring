@@ -98,6 +98,8 @@ bitflags! {
         const LINK_TIMEOUT_UPDATE = sys::IORING_LINK_TIMEOUT_UPDATE;
 
         const ETIME_SUCCESS = sys::IORING_TIMEOUT_ETIME_SUCCESS;
+
+        const MULTISHOT = sys::IORING_TIMEOUT_MULTISHOT;
     }
 }
 
