@@ -1110,12 +1110,13 @@ opcode! {
         buf_group: { u16 },
         ;;
         flags: i32 = 0,
+        ioprio: u16 = 0,
     }
 
     pub const CODE = sys::IORING_OP_READ_MULTISHOT;
 
     pub fn build(self) -> Entry {
-        let ReadMulti { fd, buf_group, flags } = self;
+        let ReadMulti { fd, buf_group, flags, ioprio } = self;
 
         let mut sqe = sqe_zeroed();
         sqe.opcode = Self::CODE;
@@ -1123,7 +1124,7 @@ opcode! {
         sqe.__bindgen_anon_3.msg_flags = flags as _;
         sqe.__bindgen_anon_4.buf_group = buf_group;
         sqe.flags |= 1 << sys::IOSQE_BUFFER_SELECT_BIT;
-        sqe.ioprio = sys::IORING_RECV_MULTISHOT as _;
+        sqe.ioprio = ioprio;
         Entry(sqe)
     }
 }
