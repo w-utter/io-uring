@@ -1126,7 +1126,7 @@ opcode! {
         sqe.len = len;
         sqe.__bindgen_anon_1.off = offset;
         sqe.__bindgen_anon_4.buf_group = buf_group;
-        //sqe.flags |= 1 << sys::IOSQE_BUFFER_SELECT_BIT;
+        sqe.flags |= 1 << sys::IOSQE_BUFFER_SELECT_BIT;
         //sqe.ioprio = sys::IORING_RECV_MULTISHOT as _;
         Entry(sqe)
     }
