@@ -1136,6 +1136,7 @@ opcode! {
         assign_fd!(sqe.fd = fd);
 
         sqe.flags |= 1 << sys::IOSQE_BUFFER_SELECT_BIT;
+        sqe.__bindgen_anon_4.buf_group = buf_group;
 
         /*
         sqe.ioprio = ioprio;
@@ -1143,7 +1144,6 @@ opcode! {
         sqe.len = len;
         sqe.__bindgen_anon_1.off = offset;
         sqe.__bindgen_anon_3.rw_flags = rw_flags;
-        sqe.__bindgen_anon_4.buf_group = buf_group;
         */
         Entry(sqe)
     }
