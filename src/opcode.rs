@@ -1121,7 +1121,7 @@ opcode! {
         buf_group: u16 = 0,
     }
 
-    pub const CODE = sys::IORING_OP_READ_MULTISHOT;
+    pub const CODE = sys::IORING_OP_READ;
 
     pub fn build(self) -> Entry {
         let ReadMulti {
