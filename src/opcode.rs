@@ -1112,7 +1112,7 @@ opcode! {
         flags: i32 = 0,
     }
 
-    pub const CODE = sys::IORING_OP_RECV;
+    pub const CODE = sys::IORING_OP_READ_MULTISHOT;
 
     pub fn build(self) -> Entry {
         let ReadMulti { fd, buf_group, flags } = self;
