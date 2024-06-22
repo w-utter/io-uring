@@ -460,6 +460,15 @@ impl BufRing {
     }
 }
 
+impl Drop for BufRing {
+    fn drop(&mut self) {
+        let buf_ring_size =
+            self.entries as usize * (self.buf_size as usize + std::mem::size_of::<BufRingEntry>());
+        unsafe {
+            libc::munmap(self.base.cast(), buf_ring_size);
+        }
+    }
+}
 
 /// A destination slot for sending fixed resources
 /// (e.g. [`opcode::MsgRingSendFd`](crate::opcode::MsgRingSendFd)).
