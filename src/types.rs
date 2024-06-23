@@ -376,6 +376,15 @@ impl BufRing {
         }
     }
 
+    ///NOTE: call this after registering the buf ring to the iouring.
+    pub fn init_buffers(&mut self) {
+        let entries = self.entries();
+        for i in 0..entries {
+            unsafe { self.add(i, i) };
+        }
+        unsafe { self.advance(entries) }
+    }
+
     /// # Safety
     ///
     /// The caller must ensure `buf_id` < `self.entries()`
