@@ -1005,13 +1005,15 @@ opcode! {
         buf: { *const u8 },
         len: { u32 },
         ;;
+        dest_addr: *const libc::sockaddr = core::ptr::null(),
+        dest_addr_len: libc::socklen_t = 0,
         flags: i32 = 0
     }
 
     pub const CODE = sys::IORING_OP_SEND;
 
     pub fn build(self) -> Entry {
-        let Send { fd, buf, len, flags } = self;
+        let Send { fd, buf, len, flags, dest_addr, dest_addr_len } = self;
 
         let mut sqe = sqe_zeroed();
         sqe.opcode = Self::CODE;
@@ -1019,6 +1021,8 @@ opcode! {
         sqe.__bindgen_anon_2.addr = buf as _;
         sqe.len = len;
         sqe.__bindgen_anon_3.msg_flags = flags as _;
+        sqe.__bindgen_anon_1.addr2 = dest_addr as _;
+        sqe.__bindgen_anon_5.__bindgen_anon_1.addr_len = dest_addr_len as _;
         Entry(sqe)
     }
 }
