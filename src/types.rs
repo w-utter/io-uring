@@ -47,6 +47,7 @@ use std::convert::TryFrom;
 use std::marker::PhantomData;
 use std::num::NonZeroU32;
 use std::os::unix::io::RawFd;
+use std::sync::atomic::{AtomicU16, Ordering};
 
 pub use sys::__kernel_rwf_t as RwFlags;
 
@@ -372,7 +373,8 @@ impl BufRing {
     #[inline]
     pub fn init(&mut self) {
         unsafe {
-            (*self.base).0.resv = 0;
+            let tail = BufRingEntry::tail(self.base);
+            let _ = AtomicU16::from_ptr(tail).store(0, Ordering::Relaxed);
         }
     }
 
@@ -408,10 +410,9 @@ impl BufRing {
     #[inline]
     pub unsafe fn advance(&mut self, count: u16) {
         unsafe {
-            let tail = &(*self.base).0.resv;
+            let tail = BufRingEntry::tail(self.base);
 
-            let _ = &(*(tail as *const u16 as *const std::sync::atomic::AtomicU16))
-                .fetch_add(count, std::sync::atomic::Ordering::Relaxed);
+            let _ = AtomicU16::from_ptr(tail).fetch_add(count, Ordering::Relaxed);
         }
     }
 

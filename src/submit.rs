@@ -485,7 +485,7 @@ impl<'a> Submitter<'a> {
 
     /// same as [register_buf_ring] except with a concrete BufRing type
     pub fn register_buffer_ring(&self, buf_ring: &types::BufRing) -> io::Result<()> {
-        unsafe {self.register_buf_ring(buf_ring.ring_addr(), buf_ring.entries(), buf_ring.bgid())} 
+        unsafe { self.register_buf_ring(buf_ring.ring_addr(), buf_ring.entries(), buf_ring.bgid()) }
     }
 
     /// same as [unregister_buf_ring] except with a concrete BufRing type
