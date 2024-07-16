@@ -374,7 +374,7 @@ impl BufRing {
     pub fn init(&mut self) {
         unsafe {
             let tail = BufRingEntry::tail(self.base);
-            let _ = AtomicU16::from_ptr(tail).store(0, Ordering::Relaxed);
+            let _ = AtomicU16::from_ptr(tail as _).store(0, Ordering::Relaxed);
         }
     }
 
@@ -412,7 +412,7 @@ impl BufRing {
         unsafe {
             let tail = BufRingEntry::tail(self.base);
 
-            let _ = AtomicU16::from_ptr(tail).fetch_add(count, Ordering::Relaxed);
+            let _ = AtomicU16::from_ptr(tail as _).fetch_add(count, Ordering::Relaxed);
         }
     }
 
