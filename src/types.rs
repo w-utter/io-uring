@@ -461,6 +461,11 @@ impl BufRing {
         self.bgid
     }
 
+    #[inline]
+    pub unsafe fn se_bgid(&mut self, id: u16) {
+        self.bgid = id;
+    }
+
     /// # Safety
     ///
     /// The caller must ensure that this `BufRing` is already initialized
